@@ -1,53 +1,14 @@
-// async function clickElements() {
-//     let elements = document.querySelectorAll('.job-card-container.relative.job-card-list.job-card-container--clickable');
+async function clickElements() {
+    let elements = document.querySelectorAll('.job-card-container.relative.job-card-list.job-card-container--clickable');
     
-//     for(let i = 0; i < elements.length; i++){
-//         await new Promise(resolve => setTimeout(resolve, 2000));
-//         elements[i].click();
-//     }
-// }
+    for(let i = 0; i < elements.length; i++){
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        elements[i].click();
+    }
+}
 
-// // Call the function
-// clickElements();
-
-
-
-
-
-
-
-
-
-// async function scrollToBottom() {
-//     // Select the jobs list container
-//     const container = document.querySelector('.jobs-search-results-list');
-//     const totalHeight = container.scrollHeight;
-//     let currentPosition = container.scrollTop;
-
-//     // Scroll by approximately one viewport's height each iteration
-//     const scrollStep = Math.max(window.innerHeight, 100);
-
-//     while (currentPosition < totalHeight) {
-//         currentPosition += scrollStep;
-//         container.scrollTo(0, currentPosition);
-
-//         // Wait for more content to load
-//         await new Promise(resolve => setTimeout(resolve, 500));
-//     }
-// }
-
-// async function clickElements() {
-//     let elements = document.querySelectorAll('.job-card-container.relative.job-card-list.job-card-container--clickable');
-    
-//     for(let i = 0; i < elements.length; i++){
-//         await new Promise(resolve => setTimeout(resolve, 2000));
-//         elements[i].click();
-//     }
-// }
-
-// // First scroll to the bottom, then click the elements
-// scrollToBottom().then(clickElements);
-
+// Call the function
+clickElements();
 
 
 
@@ -60,35 +21,29 @@ const delay = ms => new Promise(res => setTimeout(res, ms));
 //multiple multiple-choice
 // Asynchronous version
 async function processSections() {
-    // Find all the sections
     let sections = document.querySelectorAll('.jobs-easy-apply-form-section__grouping');
 
-    // Iterate over each section
     for(let sectionIndex = 0; sectionIndex < sections.length; sectionIndex++) {
         let section = sections[sectionIndex];
-
-        // Extracting the fieldset
         let fieldset = section.querySelector("[data-test-form-builder-radio-button-form-component='true']");
 
-        if (fieldset) {  // This check is important in case there's a section without a matching fieldset.
-            // Extracting the question
+        if (fieldset) {
             let question = fieldset.querySelector("[data-test-form-builder-radio-button-form-component__title]").innerText;
-            alert(`Section ${sectionIndex + 1} Question: ${question}`);
-
-            // Extracting the options
             let options = Array.from(fieldset.querySelectorAll("[data-test-text-selectable-option__input]"))
                 .map((option, index) => ({id: option.id, value: option.value, index}));
-            let optionsText = options.map((option, index) => `${index}: ${option.value}`).join('\n');
-            alert(`Section ${sectionIndex + 1} Options:\n${optionsText}`);
 
-            // Creating a pop-up
+            // Check if an option has already been selected
+            let selectedOption = options.find(option => option.selected);
+            if (selectedOption) {
+                continue;
+            }
+
+            let optionsText = options.map((option, index) => `${index}: ${option.value}`).join('\n');
             let userResponse = prompt(`Section ${sectionIndex + 1} Question: ${question}\nOptions:\n${optionsText}\nPlease type the number of your answer:`);
 
-            // Checking if the input is a number
             if(isNaN(userResponse) || userResponse < 0 || userResponse >= options.length) {
                 alert(`Invalid option selected: ${userResponse}. Please input a number between 0 and ${options.length - 1}.`);
             } else {
-                // Clicking the selected option
                 let selectedOption = options[parseInt(userResponse, 10)];
                 if (selectedOption) {
                     let selectedRadioInput = document.getElementById(selectedOption.id);
@@ -107,42 +62,23 @@ async function processSections() {
 }
 
 
-
-
-
-
-
-// Asynchronous version
 async function processTextInputSections() {
-    // Find all the text input sections
     let textInputSections = document.querySelectorAll('[data-test-single-line-text-form-component]');
 
-    // Iterate over each text input section
     for(let sectionIndex = 0; sectionIndex < textInputSections.length; sectionIndex++) {
         let section = textInputSections[sectionIndex];
-
-        // Extracting the input field
         let inputField = section.querySelector('input[type="text"]');
 
-        if (inputField) {  // This check is important in case there's a section without a matching input field.
-            // Extracting the question
+        if (inputField && !inputField.value) { 
             let question = section.querySelector('label').innerText;
-            alert(`Section ${sectionIndex + 1} Question: ${question}`);
-
-            // Creating a pop-up for user input
             let userResponse = prompt(`Section ${sectionIndex + 1} Question: ${question}\nPlease type your answer:`);
 
-            // Checking if userResponse is null (user clicked "Cancel") or empty
             if(userResponse === null || userResponse === "") {
                 alert(`Invalid input. You must type an answer.`);
             } else {
-                // Filling the input field
                 inputField.value = userResponse;
-
-                // Dispatch the 'input' event
                 const event = new Event('input', { bubbles: true });
                 await inputField.dispatchEvent(event);
-                
                 alert(`You typed: ${userResponse} for section ${sectionIndex + 1}`);
             }
         }
@@ -150,49 +86,27 @@ async function processTextInputSections() {
 }
 
 
-
-
-
-
-
 async function processDropdownSections() {
-    // Find all the dropdown sections
     let dropdownSections = document.querySelectorAll('.jobs-easy-apply-form-section__grouping');
 
-    // Iterate over each dropdown section
     for(let sectionIndex = 0; sectionIndex < dropdownSections.length; sectionIndex++) {
         let section = dropdownSections[sectionIndex];
-
-        // Extracting the dropdown
         let dropdown = section.querySelector('select');
 
-        if (dropdown) {  // This check is important in case there's a section without a matching dropdown.
-            // Extracting the question
+        if (dropdown && dropdown.selectedIndex === 0) {  
             let question = section.querySelector('label').innerText;
-
-            // Extracting the options
             let options = Array.from(dropdown.querySelectorAll('option'))
                 .map((option, index) => ({id: option.value, value: option.text, index}));
-
-            // Exclude the first "Select an option" placeholder
             options = options.slice(1);
-
             let optionsText = options.map((option, index) => `${index}: ${option.value}`).join('\n');
-
-            // Creating a pop-up for user input
             let userResponse = prompt(`Section ${sectionIndex + 1} Question: ${question}\nOptions:\n${optionsText}\nPlease type the number of your answer:`);
 
-            // Checking if the input is a number and within range
             if(isNaN(userResponse) || userResponse < 0 || userResponse >= options.length) {
                 alert(`Invalid option selected: ${userResponse}. Please input a number between 0 and ${options.length - 1}.`);
             } else {
-                // Selecting the chosen option
-                dropdown.selectedIndex = parseInt(userResponse, 10) + 1; // "+1" because we excluded the first placeholder option
-
-                // Dispatch the 'change' event
+                dropdown.selectedIndex = parseInt(userResponse, 10) + 1;
                 const event = new Event('change', { bubbles: true });
                 await dropdown.dispatchEvent(event);
-                
                 alert(`You selected: ${options[userResponse].value} for section ${sectionIndex + 1}`);
             }
         }
@@ -200,41 +114,29 @@ async function processDropdownSections() {
 }
 
 
-
 async function processTextAreas() {
-    // Find all the textarea sections
     let textareaSections = document.querySelectorAll('.jobs-easy-apply-form-section__grouping');
 
-    // Iterate over each textarea section
     for(let sectionIndex = 0; sectionIndex < textareaSections.length; sectionIndex++) {
         let section = textareaSections[sectionIndex];
-
-        // Extracting the textarea
         let textarea = section.querySelector('textarea');
 
-        if (textarea) {  // This check is important in case there's a section without a matching textarea.
-            // Extracting the question
+        if (textarea && !textarea.value) {
             let question = section.querySelector('label').innerText;
-
-            // Creating a pop-up for user input
             let userResponse = prompt(`Section ${sectionIndex + 1} Question: ${question}\nPlease type your answer:`);
 
-            // Checking if the input is not empty
             if(!userResponse.trim()) {
                 alert(`No input provided. Please type your answer.`);
             } else {
-                // Fill the textarea with the user's response
                 textarea.value = userResponse;
-
-                // Dispatch the 'input' event
                 const event = new Event('input', { bubbles: true });
                 await textarea.dispatchEvent(event);
-                
                 alert(`You answered: ${userResponse} for section ${sectionIndex + 1}`);
             }
         }
     }
 }
+
 
 
 
@@ -306,7 +208,133 @@ await clickCloseButton();
 }
 
 
-main();
+async function scrollToBottom() {
+    // Select the jobs list container
+    const container = document.querySelector('.jobs-search-results-list');
+    const totalHeight = container.scrollHeight;
+    let currentPosition = container.scrollTop;
+
+    // Scroll by approximately one viewport's height each iteration
+    const scrollStep = Math.max(window.innerHeight, 100);
+
+    while (currentPosition < totalHeight) {
+        currentPosition += scrollStep;
+        container.scrollTo(0, currentPosition);
+
+        // Wait for more content to load
+        await new Promise(resolve => setTimeout(resolve, 500));
+    }
+}
+
+
+
+// Function to get the current page
+async function getCurrentPageAsync() {
+    return new Promise((resolve) => {
+      // Get all page buttons
+      let pageButtons = document.querySelectorAll('.artdeco-pagination__indicator');
+  
+      // Loop through all the buttons
+      for(let i = 0; i < pageButtons.length; i++) {
+        // Check if the button has the 'active' and 'selected' classes
+        if(pageButtons[i].classList.contains('active') && pageButtons[i].classList.contains('selected')) {
+          // Get the page number from the button
+          let pageNumber = pageButtons[i].querySelector('button').textContent;
+          // Resolve the promise with the page number
+                  // Convert the page number to an integer and resolve the promise with it
+        resolve(parseInt(pageNumber, 10));
+        }
+      }
+  
+      // Resolve the promise with null if no page was found
+      resolve(null);
+    });
+  }
+
+
+
+
+
+  async function goToNextPage() {
+    alert("starting");
+
+    await scrollToBottom();
+    let currentPage = await getCurrentPageAsync();
+    // alert(`Current page: ${currentPage}`);
+
+    let nextPage = Number(currentPage) + 1;
+    // alert(`Next page: ${nextPage}`);
+
+    let nextPageButton = document.querySelector(`li[data-test-pagination-page-btn="${nextPage}"] button`);
+
+    if (!nextPageButton) {
+        alert("Next page button not found, looking for '...' button");
+        nextPageButton = document.querySelector(`button[aria-label="Page ${nextPage}"]`);
+    }
+
+    if (nextPageButton) {
+        // alert("Next page button or '...' button found, clicking...");
+        nextPageButton.click();
+        await delay(5000);
+        // await goToNextPage();
+    } else {
+        console.log("Final page reached");
+        // Uncomment these lines if needed
+        // localStorage.setItem("currentPage", "1");
+        // chrome.runtime.sendMessage({ message: 'done', page: currentPage });
+    }
+}
+
+
+
+
+async function clickElements() {
+
+    await scrollToBottom();
+    let elements = document.querySelectorAll('.job-card-container.relative.job-card-list.job-card-container--clickable');
+    
+    for(let i = 0; i < elements.length; i++){
+        elements[i].click();
+
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        
+        // Add a step to click the "Easy Apply" button
+        let easyApplyButton = document.querySelector('button[aria-label*="Easy Apply"]');
+        if (easyApplyButton) {
+            easyApplyButton.click();
+            console.log('Easy Apply button clicked, waiting 2 seconds before calling main...');
+            await new Promise(resolve => setTimeout(resolve, 2000));
+        }
+
+        try {
+            await main(); // Call main function
+        } catch (error) {
+            console.error('Error in main: ', error);
+        }
+    }
+    await goToNextPage();
+    await clickElements();
+}
+
+// // First scroll to the bottom, then click the elements
+
+
+
+clickElements();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
