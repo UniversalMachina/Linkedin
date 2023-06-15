@@ -3,13 +3,12 @@
     "name": "Button Clicker 2.0",
     "description": "This extension will find and click all '1-Click Apply' buttons on a webpage",
     "version": "1.0",
-    "permissions": ["activeTab", "tabs", "<all_urls>",  "notifications"],
+    "permissions": ["activeTab", "tabs", "<all_urls>",  "notifications", "webNavigation"],
     "background": {
       "scripts": ["background.js"],
-      "persistent": false
+      "persistent": true
     },
     "browser_action": {
       "default_title": "Click Apply Buttons"
     }
   }
-  

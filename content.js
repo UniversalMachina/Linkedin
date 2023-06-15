@@ -1,21 +1,21 @@
-async function clickElements() {
-    let elements = document.querySelectorAll('.job-card-container.relative.job-card-list.job-card-container--clickable');
-    
-    for(let i = 0; i < elements.length; i++){
-        await new Promise(resolve => setTimeout(resolve, 2000));
-        elements[i].click();
-    }
-}
-
-// Call the function
-clickElements();
 
 
 
 
 const delay = ms => new Promise(res => setTimeout(res, ms));
 
-
+async function fetchWithHandleError(url, data) {
+    try {
+        let response = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
+        return await response.json();
+    } catch (error) {
+        console.error('There has been a problem with your fetch operation:', error);
+    }
+}
 
 
 //multiple multiple-choice
@@ -39,7 +39,13 @@ async function processSections() {
             }
 
             let optionsText = options.map((option, index) => `${index}: ${option.value}`).join('\n');
-            let userResponse = prompt(`Section ${sectionIndex + 1} Question: ${question}\nOptions:\n${optionsText}\nPlease type the number of your answer:`);
+            alert(`Section ${sectionIndex + 1} Question: ${question}\nOptions:\n${optionsText}\nPlease type the number of your answer:`)
+            // let userResponse = prompt(`Section ${sectionIndex + 1} Question: ${question}\nOptions:\n${optionsText}\nPlease type the number of your answer:`);
+
+            const data = { question: question, answer: optionsText };
+            let answer = await fetchWithHandleError('http://localhost:5000/ask_mcq', data);
+            userResponse = Number(answer.value);
+            alert(userResponse);
 
             if(isNaN(userResponse) || userResponse < 0 || userResponse >= options.length) {
                 alert(`Invalid option selected: ${userResponse}. Please input a number between 0 and ${options.length - 1}.`);
@@ -61,6 +67,8 @@ async function processSections() {
     }
 }
 
+// processSections();
+
 
 async function processTextInputSections() {
     let textInputSections = document.querySelectorAll('[data-test-single-line-text-form-component]');
@@ -71,7 +79,13 @@ async function processTextInputSections() {
 
         if (inputField && !inputField.value) { 
             let question = section.querySelector('label').innerText;
-            let userResponse = prompt(`Section ${sectionIndex + 1} Question: ${question}\nPlease type your answer:`);
+            // let userResponse = prompt(`Section ${sectionIndex + 1} Question: ${question}\nPlease type your answer:`);
+            
+
+            const data = { question: question };
+            let answer = await fetchWithHandleError('http://localhost:5000/ask_question', data);
+        
+            let userResponse = answer.message;
 
             if(userResponse === null || userResponse === "") {
                 alert(`Invalid input. You must type an answer.`);
@@ -99,7 +113,11 @@ async function processDropdownSections() {
                 .map((option, index) => ({id: option.value, value: option.text, index}));
             options = options.slice(1);
             let optionsText = options.map((option, index) => `${index}: ${option.value}`).join('\n');
-            let userResponse = prompt(`Section ${sectionIndex + 1} Question: ${question}\nOptions:\n${optionsText}\nPlease type the number of your answer:`);
+            // let userResponse = prompt(`Section ${sectionIndex + 1} Question: ${question}\nOptions:\n${optionsText}\nPlease type the number of your answer:`);
+            const data = { question: question, answer: optionsText };
+            let answer = await fetchWithHandleError('http://localhost:5000/ask_mcq', data);
+            userResponse = Number(answer.value);
+            alert(userResponse);
 
             if(isNaN(userResponse) || userResponse < 0 || userResponse >= options.length) {
                 alert(`Invalid option selected: ${userResponse}. Please input a number between 0 and ${options.length - 1}.`);
@@ -123,7 +141,11 @@ async function processTextAreas() {
 
         if (textarea && !textarea.value) {
             let question = section.querySelector('label').innerText;
-            let userResponse = prompt(`Section ${sectionIndex + 1} Question: ${question}\nPlease type your answer:`);
+            // let userResponse = prompt(`Section ${sectionIndex + 1} Question: ${question}\nPlease type your answer:`);
+            const data = { question: question };
+            let answer = await fetchWithHandleError('http://localhost:5000/ask_question', data);
+        
+            let userResponse = answer.message;
 
             if(!userResponse.trim()) {
                 alert(`No input provided. Please type your answer.`);
@@ -140,8 +162,137 @@ async function processTextAreas() {
 
 
 
+async function processCheckboxSections() {
+    let sections = document.querySelectorAll('.jobs-easy-apply-form-section__grouping');
+
+    for(let sectionIndex = 0; sectionIndex < sections.length; sectionIndex++) {
+        let section = sections[sectionIndex];
+        let fieldset = section.querySelector("[data-test-checkbox-form-component='true']");
+
+        if (fieldset) {
+            let question = fieldset.querySelector("[data-test-checkbox-form-title]").innerText;
+            let options = Array.from(fieldset.querySelectorAll("[data-test-text-selectable-option__input]"))
+                .map((option, index) => ({id: option.id, value: option.value, index}));
+
+            let optionsText = options.map((option, index) => `${index}: ${option.value}`).join('\n');
+
+            const data = { question: question, answer: optionsText };
+            let answer = await fetchWithHandleError('http://localhost:5000/ask_mcq', data);
+            userResponse = Number(answer.value);
+            alert(userResponse);
+
+            if(isNaN(userResponse) || userResponse < 0 || userResponse >= options.length) {
+                alert(`Invalid option selected: ${userResponse}. Please input a number between 0 and ${options.length - 1}.`);
+            } else {
+                let selectedOption = options[parseInt(userResponse, 10)];
+                let selectedCheckboxInput = document.getElementById(selectedOption.id);
+
+                if (selectedCheckboxInput) {
+                    var clickEvent = new MouseEvent("click", {
+                        bubbles: true,
+                        cancelable: false,
+                        view: window,
+                    });
+                    selectedCheckboxInput.dispatchEvent(clickEvent);
+                    alert(`You selected: ${selectedOption.value} for section ${sectionIndex + 1}`);
+                } else {
+                    alert(`Invalid option selected: ${userResponse}`);
+                }
+            }
+        }
+    }
+}
+
+// processCheckboxSections();
+
+
+// processCheckboxSections();
+
+// processSections();
+// processDropdownSections();
+// processTextAreas();
+// processTextInputSections();
     
 
+// async function setTomorrowDate() {
+//     const tomorrow = new Date();
+//     tomorrow.setDate(tomorrow.getDate() + 2);
+
+//     const day = String(tomorrow.getDate()).padStart(2, '0');
+//     const month = String(tomorrow.getMonth() + 1).padStart(2, '0'); //January is 0
+//     const year = tomorrow.getFullYear();
+
+//     const inputDate = `${month}/${day}/${year}`;
+
+//     // await a Promise.resolve to simulate asynchronous operation
+//     await Promise.resolve();
+
+//     let dateInput = document.querySelector("[name='artdeco-date']");
+
+//     if (dateInput) {
+//         dateInput.value = inputDate;
+
+//         ['input', 'change', 'blur'].forEach(eventType => {
+//             var event = new Event(eventType, { bubbles: true });
+//             dateInput.dispatchEvent(event);
+//         });
+//     }
+// }
+
+
+// setTomorrowDate();
+
+
+async function setTomorrowDate() {
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 2);
+
+    const day = tomorrow.getDate(); // No leading zero padding
+    const month = tomorrow.getMonth() + 1; // January is 0
+    const year = tomorrow.getFullYear();
+
+    // Form the date
+    const inputDate = `${month}/${day}/${year}`;
+
+    // Display the generated date
+    alert(`Generated Date: ${inputDate}`);
+
+    // Wait for possible datepicker initialization
+    // await a Promise.resolve to simulate asynchronous operation
+    await Promise.resolve();
+
+    let dateInput = document.querySelector("[name='artdeco-date']");
+
+    if (dateInput) {
+        dateInput.value = inputDate;
+
+        ['input', 'change', 'blur'].forEach(eventType => {
+            var event = new Event(eventType, { bubbles: true });
+            dateInput.dispatchEvent(event);
+        });
+    }
+}
+
+setTomorrowDate();
+
+
+
+//06/17/2023
+
+
+
+async function clickDiscardButton() {
+    let button = document.querySelector('button[data-control-name="discard_application_confirm_btn"]');
+    
+    if (button) {
+        button.click();
+        console.log('Button clicked.');
+    } else {
+        console.log('Button not found.');
+    }
+}
+
+// clickDiscardButton();
 
 
 async function clickNextButton() {
@@ -320,29 +471,72 @@ async function clickElements() {
 
 
 
-clickElements();
+// clickElements();
+
+// async function clickEasyApply() {
+//     let easyApplyButton = document.querySelector('button[aria-label*="Easy Apply"]');
+//     alert("starting");
+//     if (easyApplyButton) {
+//         alert("found");
+//         // easyApplyButton.click();
+//         console.log('Easy Apply button clicked, waiting 2 seconds before calling main...');
+//         await new Promise(resolve => setTimeout(resolve, 2000));
+//         try {
+//             await main(); // Call main function
+//         } catch (error) {
+//             console.error('Error in main: ', error);
+//         }
+//     }
+// }
+
+// Call the function
+
+
+async function clickElements() {
+
+    await scrollToBottom();
+    let elements = document.querySelectorAll('.job-card-container.relative.job-card-list.job-card-container--clickable');
+    
+    for(let i = 0; i < elements.length; i++){
+        elements[i].click();
+
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        
+
+        await clickEasyApply(); // Call main function
+
+    }
+    await goToNextPage();
+    await clickElements();
+}
 
 
 
 
 
 
+async function clickEasyApply() {
+    let container = document.querySelector('.jobs-unified-top-card');
+    let easyApplyButtons = Array.from(container.querySelectorAll('button[aria-label*="Easy Apply"]'));
+    let visibleButton;
+
+    // find the first visible and enabled button
+    for(let button of easyApplyButtons) {
+        if(button.offsetParent !== null && !button.disabled && container.contains(button)) {
+            visibleButton = button;
+            break;
+        }
+    }
+
+    if (visibleButton) {
+        alert("found");
+        visibleButton.click();
+        console.log('Easy Apply button clicked, waiting 2 seconds before calling main...');
+        await new Promise(resolve => setTimeout(resolve, 2000));
+    } else {
+        console.log("No visible and enabled Easy Apply button found.");
+    }
+}
 
 
-
-
-
-
-
-
-
-
-
-   
-
-
-
-
-
-
-
+// clickElements();

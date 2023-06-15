@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Web App</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      display: flex;
+      height: 100vh;
+      justify-content: center;
+      align-items: center;
+      background-color: #f2f2f2;
+    }
+
+    .main-container {
+      display: flex;
+      width: 80%;
+      height: 80%;
+      border-radius: 15px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+
+    .sidebar {
+      width: 20%;
+      background-color: #fff;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .platform-button {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      border: none;
+      background-color: #f8f8f8;
+      cursor: pointer;
+    }
+
+    .platform-button:hover {
+      background-color: #e8e8e8;
+    }
+
+    .chat-interface {
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+      padding: 20px;
+    }
+
+    .user-selection {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .user-button {
+      padding: 10px 20px;
+      border: none;
+      background-color: #f8f8f8;
+      cursor: pointer;
+    }
+
+    .user-button:hover {
+      background-color: #e8e8e8;
+    }
+
+    .chat-log {
+      flex-grow: 1;
+      border-top: 1px solid #ccc;
+      padding-top: 20px;
+      margin-top: 20px;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="main-container">
+    <div class="sidebar">
+      <button class="platform-button">LinkedIn</button>
+      <button class="platform-button">ZipRecruiter</button>
+    </div>
+    <div class="chat-interface">
+      <div class="user-selection">
+        <button class="user-button">User 1</button>
+        <button class="user-button">User 2</button>
+      </div>
+      <div class="chat-log">
+        <!-- Chat messages will be dynamically populated here -->
+      </div>
+    </div>
+  </div>
+</body>
+</html>
