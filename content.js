@@ -413,57 +413,9 @@ async function getCurrentPageAsync() {
 
 
 
-// async function clickElements() {
-
-//     await scrollToBottom();
-//     let elements = document.querySelectorAll('.job-card-container.relative.job-card-list.job-card-container--clickable');
-    
-//     for(let i = 0; i < elements.length; i++){
-//         elements[i].click();
-
-//         await new Promise(resolve => setTimeout(resolve, 2000));
-        
-//         // Add a step to click the "Easy Apply" button
-//         let easyApplyButton = document.querySelector('button[aria-label*="Easy Apply"]');
-//         if (easyApplyButton) {
-//             easyApplyButton.click();
-//             console.log('Easy Apply button clicked, waiting 2 seconds before calling main...');
-//             await new Promise(resolve => setTimeout(resolve, 2000));
-//         }
-
-//         try {
-//             await main(); // Call main function
-//         } catch (error) {
-//             console.error('Error in main: ', error);
-//         }
-//     }
-//     await goToNextPage();
-//     await clickElements();
-// }
-
-// // First scroll to the bottom, then click the elements
 
 
 
-// clickElements();
-
-// async function clickEasyApply() {
-//     let easyApplyButton = document.querySelector('button[aria-label*="Easy Apply"]');
-//     alert("starting");
-//     if (easyApplyButton) {
-//         alert("found");
-//         // easyApplyButton.click();
-//         console.log('Easy Apply button clicked, waiting 2 seconds before calling main...');
-//         await new Promise(resolve => setTimeout(resolve, 2000));
-//         try {
-//             await main(); // Call main function
-//         } catch (error) {
-//             console.error('Error in main: ', error);
-//         }
-//     }
-// }
-
-// Call the function
 
 
 async function clickElements() {
