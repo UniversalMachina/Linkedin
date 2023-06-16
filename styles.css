@@ -1,0 +1,119 @@
+body {
+    margin: 0;
+    padding: 2%;
+    box-sizing: border-box;
+    display: flex;
+    height: 100vh;
+    justify-content: flex-start;
+    align-items: center;
+    background: linear-gradient(to bottom, #008080 50%, #D3D3D3 50%);
+  }
+  
+  .main-container {
+    display: flex;
+    width: 96%;
+    height: 96%;
+  }
+  
+  .sidebar {
+    width: 12%;
+    height: 100%;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.05);
+    margin-right: 2%;
+    transform: translateY(-3%);
+  }
+  
+  .platform-button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border: none;
+    background-color: #f8f8f8;
+    cursor: pointer;
+  }
+  
+  .platform-button:hover {
+    background-color: #e8e8e8;
+  }
+  
+  .chat-container {
+    display: flex;
+    flex-grow: 1;
+    height: 90%;
+  }
+  
+  .chat-log {
+    flex-grow: 1;
+    background-color: #fff;
+    border-radius: 35px 35px 15px 15px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.05);
+    margin-right: 2%;
+    transform: translateY(2%);
+  }
+  
+  .chat-header {
+    background-color: #20B2AA;
+    padding: 30px;
+    color: white;
+    border-radius: 25px 25px 0 0;
+    font-weight: bold;
+    font-size: 25px;
+  }
+  
+  .chat-content {
+    padding: 20px;
+  }
+  
+  .user-container {
+    width: 20%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+  }
+  
+  .user-creation {
+    height: 25%;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.05);
+    margin-bottom: 5%;
+  }
+  
+  .user-selection {
+    flex-grow: 1;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.05);
+  }
+  
+  .user-button {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border: none;
+    background-color: #f8f8f8;
+    cursor: pointer;
+    border-radius: 20px;
+    margin-bottom: 10px;
+  }
+  
+  .user-button:hover {
+    background-color: #e8e8e8;
+  }
+  
+  .close-button {
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    color: red;
+    font-weight: bold;
+  }
+  

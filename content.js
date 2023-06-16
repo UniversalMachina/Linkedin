@@ -203,44 +203,9 @@ async function processCheckboxSections() {
     }
 }
 
-// processCheckboxSections();
 
 
-// processCheckboxSections();
 
-// processSections();
-// processDropdownSections();
-// processTextAreas();
-// processTextInputSections();
-    
-
-// async function setTomorrowDate() {
-//     const tomorrow = new Date();
-//     tomorrow.setDate(tomorrow.getDate() + 2);
-
-//     const day = String(tomorrow.getDate()).padStart(2, '0');
-//     const month = String(tomorrow.getMonth() + 1).padStart(2, '0'); //January is 0
-//     const year = tomorrow.getFullYear();
-
-//     const inputDate = `${month}/${day}/${year}`;
-
-//     // await a Promise.resolve to simulate asynchronous operation
-//     await Promise.resolve();
-
-//     let dateInput = document.querySelector("[name='artdeco-date']");
-
-//     if (dateInput) {
-//         dateInput.value = inputDate;
-
-//         ['input', 'change', 'blur'].forEach(eventType => {
-//             var event = new Event(eventType, { bubbles: true });
-//             dateInput.dispatchEvent(event);
-//         });
-//     }
-// }
-
-
-// setTomorrowDate();
 
 
 async function setTomorrowDate() {
@@ -273,11 +238,11 @@ async function setTomorrowDate() {
     }
 }
 
-setTomorrowDate();
 
 
 
-//06/17/2023
+
+
 
 
 
@@ -342,6 +307,9 @@ async function main() {
         await processDropdownSections();
         await processTextAreas();
         await processTextInputSections();
+        await processCheckboxSections();
+        await setTomorrowDate();
+
     try {
 
         await delay(3000);
@@ -353,6 +321,12 @@ async function main() {
     } catch (error) {
         console.log(error.message);
     }
+    //if none of either are there
+    await closeButton();
+    await delay(3000);
+    await clickDiscardButton();
+    await delay(3000);
+
     modal = document.querySelector('.jobs-easy-apply-content');
 }
 await clickCloseButton();
