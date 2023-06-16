@@ -1,0 +1,115 @@
+@font-face {
+  font-family: 'Myriad Pro Light';
+  src: url('fonts/MyriadPro-Light.otf') format('opentype');
+}
+
+
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  background: #f0f0f0;
+}
+
+.main-container {
+  display: flex;
+  flex: 1;
+}
+
+.sidebar {
+  width: 15%;
+  background-color: #2f2f2f;
+  padding: 20px;
+  color: #fff;
+}
+
+.platform-button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  border: none;
+  background-color: #404040;
+  color: #fff;
+  cursor: pointer;
+}
+
+.platform-button:hover {
+  background-color: #505050;
+}
+
+.chat-container {
+  display: flex;
+  flex-grow: 1;
+  justify-content: space-between;
+  align-items: stretch;
+}
+
+.chat-log {
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+  border-radius: 20px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.1);
+  margin: 2%;
+  flex-grow: 1;
+}
+
+.chat-header {
+  background-color: #008080;
+  padding: 20px;
+  color: white;
+  border-radius: 18px 18px 0 0;
+  font-weight: bold;
+  font-family: 'Myriad Pro Light', Arial, sans-serif;
+  font-size: 1.5em;
+}
+
+.chat-content {
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 25px 25px 25px 25px;
+  flex-grow: 1;
+  font-family: 'Myriad Pro Light', Arial, sans-serif;
+}
+
+.user-container {
+  width: 15%;
+  background-color: #fff;
+  padding: 20px;
+}
+
+.user-creation,
+.user-selection {
+  border-radius: 15px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.1);
+  padding: 20px;
+  margin-bottom: 10px;
+}
+
+.user-button {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border: none;
+  background-color: #f0f0f0;
+  cursor: pointer;
+  border-radius: 15px;
+  margin-bottom: 10px;
+}
+
+.user-button:hover {
+  background-color: #e0e0e0;
+}
+
+.close-button {
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  color: red;
+  font-weight: bold;
+}

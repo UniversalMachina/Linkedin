@@ -220,7 +220,7 @@ async function setTomorrowDate() {
     const inputDate = `${month}/${day}/${year}`;
 
     // Display the generated date
-    alert(`Generated Date: ${inputDate}`);
+    // alert(`Generated Date: ${inputDate}`);
 
     // Wait for possible datepicker initialization
     // await a Promise.resolve to simulate asynchronous operation
@@ -322,10 +322,10 @@ async function main() {
         console.log(error.message);
     }
     //if none of either are there
-    await closeButton();
-    await delay(3000);
-    await clickDiscardButton();
-    await delay(3000);
+    // await closeButton();
+    // await delay(3000);
+    // await clickDiscardButton();
+    // await delay(3000);
 
     modal = document.querySelector('.jobs-easy-apply-content');
 }
@@ -413,33 +413,33 @@ async function getCurrentPageAsync() {
 
 
 
-async function clickElements() {
+// async function clickElements() {
 
-    await scrollToBottom();
-    let elements = document.querySelectorAll('.job-card-container.relative.job-card-list.job-card-container--clickable');
+//     await scrollToBottom();
+//     let elements = document.querySelectorAll('.job-card-container.relative.job-card-list.job-card-container--clickable');
     
-    for(let i = 0; i < elements.length; i++){
-        elements[i].click();
+//     for(let i = 0; i < elements.length; i++){
+//         elements[i].click();
 
-        await new Promise(resolve => setTimeout(resolve, 2000));
+//         await new Promise(resolve => setTimeout(resolve, 2000));
         
-        // Add a step to click the "Easy Apply" button
-        let easyApplyButton = document.querySelector('button[aria-label*="Easy Apply"]');
-        if (easyApplyButton) {
-            easyApplyButton.click();
-            console.log('Easy Apply button clicked, waiting 2 seconds before calling main...');
-            await new Promise(resolve => setTimeout(resolve, 2000));
-        }
+//         // Add a step to click the "Easy Apply" button
+//         let easyApplyButton = document.querySelector('button[aria-label*="Easy Apply"]');
+//         if (easyApplyButton) {
+//             easyApplyButton.click();
+//             console.log('Easy Apply button clicked, waiting 2 seconds before calling main...');
+//             await new Promise(resolve => setTimeout(resolve, 2000));
+//         }
 
-        try {
-            await main(); // Call main function
-        } catch (error) {
-            console.error('Error in main: ', error);
-        }
-    }
-    await goToNextPage();
-    await clickElements();
-}
+//         try {
+//             await main(); // Call main function
+//         } catch (error) {
+//             console.error('Error in main: ', error);
+//         }
+//     }
+//     await goToNextPage();
+//     await clickElements();
+// }
 
 // // First scroll to the bottom, then click the elements
 
@@ -478,6 +478,11 @@ async function clickElements() {
         
 
         await clickEasyApply(); // Call main function
+        try {
+            await main(); // Call main function
+        } catch (error) {
+            console.error('Error in main: ', error);
+        }
 
     }
     await goToNextPage();
@@ -513,4 +518,4 @@ async function clickEasyApply() {
 }
 
 
-// clickElements();
+clickElements();
