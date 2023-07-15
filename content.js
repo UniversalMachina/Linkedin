@@ -39,28 +39,28 @@ async function processSections() {
             }
 
             let optionsText = options.map((option, index) => `${index}: ${option.value}`).join('\n');
-            alert(`Section ${sectionIndex + 1} Question: ${question}\nOptions:\n${optionsText}\nPlease type the number of your answer:`)
+            // alert(`Section ${sectionIndex + 1} Question: ${question}\nOptions:\n${optionsText}\nPlease type the number of your answer:`)
             // let userResponse = prompt(`Section ${sectionIndex + 1} Question: ${question}\nOptions:\n${optionsText}\nPlease type the number of your answer:`);
 
             const data = { question: question, answer: optionsText };
             let answer = await fetchWithHandleError('http://localhost:5000/ask_mcq', data);
             userResponse = Number(answer.value);
-            alert(userResponse);
+            // alert(userResponse);
 
             if(isNaN(userResponse) || userResponse < 0 || userResponse >= options.length) {
-                alert(`Invalid option selected: ${userResponse}. Please input a number between 0 and ${options.length - 1}.`);
+                // alert(`Invalid option selected: ${userResponse}. Please input a number between 0 and ${options.length - 1}.`);
             } else {
                 let selectedOption = options[parseInt(userResponse, 10)];
                 if (selectedOption) {
                     let selectedRadioInput = document.getElementById(selectedOption.id);
                     if (selectedRadioInput) {
                         await selectedRadioInput.click();
-                        alert(`You selected: ${selectedOption.value} for section ${sectionIndex + 1}`);
+                        // alert(`You selected: ${selectedOption.value} for section ${sectionIndex + 1}`);
                     } else {
-                        alert(`Invalid option selected: ${userResponse}`);
+                        // alert(`Invalid option selected: ${userResponse}`);
                     }
                 } else {
-                    alert(`Invalid option selected: ${userResponse}`);
+                    // alert(`Invalid option selected: ${userResponse}`);
                 }
             }
         }
@@ -88,12 +88,12 @@ async function processTextInputSections() {
             let userResponse = answer.message;
 
             if(userResponse === null || userResponse === "") {
-                alert(`Invalid input. You must type an answer.`);
+                // alert(`Invalid input. You must type an answer.`);
             } else {
                 inputField.value = userResponse;
                 const event = new Event('input', { bubbles: true });
                 await inputField.dispatchEvent(event);
-                alert(`You typed: ${userResponse} for section ${sectionIndex + 1}`);
+                // alert(`You typed: ${userResponse} for section ${sectionIndex + 1}`);
             }
         }
     }
@@ -117,15 +117,15 @@ async function processDropdownSections() {
             const data = { question: question, answer: optionsText };
             let answer = await fetchWithHandleError('http://localhost:5000/ask_mcq', data);
             userResponse = Number(answer.value);
-            alert(userResponse);
+            // alert(userResponse);
 
             if(isNaN(userResponse) || userResponse < 0 || userResponse >= options.length) {
-                alert(`Invalid option selected: ${userResponse}. Please input a number between 0 and ${options.length - 1}.`);
+                // alert(`Invalid option selected: ${userResponse}. Please input a number between 0 and ${options.length - 1}.`);
             } else {
                 dropdown.selectedIndex = parseInt(userResponse, 10) + 1;
                 const event = new Event('change', { bubbles: true });
-                await dropdown.dispatchEvent(event);
-                alert(`You selected: ${options[userResponse].value} for section ${sectionIndex + 1}`);
+                dropdown.dispatchEvent(event);
+                // alert(`You selected: ${options[userResponse].value} for section ${sectionIndex + 1}`);
             }
         }
     }
@@ -148,12 +148,12 @@ async function processTextAreas() {
             let userResponse = answer.message;
 
             if(!userResponse.trim()) {
-                alert(`No input provided. Please type your answer.`);
+                // alert(`No input provided. Please type your answer.`);
             } else {
                 textarea.value = userResponse;
                 const event = new Event('input', { bubbles: true });
-                await textarea.dispatchEvent(event);
-                alert(`You answered: ${userResponse} for section ${sectionIndex + 1}`);
+                textarea.dispatchEvent(event);
+                // alert(`You answered: ${userResponse} for section ${sectionIndex + 1}`);
             }
         }
     }
@@ -179,7 +179,7 @@ async function processCheckboxSections() {
             const data = { question: question, answer: optionsText };
             let answer = await fetchWithHandleError('http://localhost:5000/ask_mcq', data);
             userResponse = Number(answer.value);
-            alert(userResponse);
+            // alert(userResponse);
 
             if(isNaN(userResponse) || userResponse < 0 || userResponse >= options.length) {
                 alert(`Invalid option selected: ${userResponse}. Please input a number between 0 and ${options.length - 1}.`);
@@ -194,9 +194,9 @@ async function processCheckboxSections() {
                         view: window,
                     });
                     selectedCheckboxInput.dispatchEvent(clickEvent);
-                    alert(`You selected: ${selectedOption.value} for section ${sectionIndex + 1}`);
+                    // alert(`You selected: ${selectedOption.value} for section ${sectionIndex + 1}`);
                 } else {
-                    alert(`Invalid option selected: ${userResponse}`);
+                    // alert(`Invalid option selected: ${userResponse}`);
                 }
             }
         }
@@ -295,6 +295,13 @@ async function clickCloseButton() {
     }
 }
 
+async function isButtonAvailable(buttonSelector) {
+    let button = document.querySelector(buttonSelector);
+    if(button) {
+        return true;
+    }
+    return false;
+}
 
 async function main() {
 
@@ -302,7 +309,9 @@ async function main() {
 
     // As long as the modal exists...
     while (modal) {
-
+        let delayTime = Math.floor(Math.random() * (5000 - 2000 + 1) + 2000);
+    
+        await delay(delayTime);
         await processSections();
         await processDropdownSections();
         await processTextAreas();
@@ -313,10 +322,16 @@ async function main() {
     try {
 
         await delay(3000);
-        await clickNextButton();
-        await clickReviewButton();
-        await clickSubmitButton();
-        await delay(3000);
+        if(await isButtonAvailable('button[data-easy-apply-next-button]')) {
+            await clickNextButton();
+        }
+        else if(await isButtonAvailable('button[aria-label="Review your application"]')) {
+            await clickReviewButton();
+        }
+        else if(await isButtonAvailable('button[aria-label="Submit application"]')) {
+            await clickSubmitButton();
+        }
+
 
     } catch (error) {
         console.log(error.message);
@@ -325,10 +340,11 @@ async function main() {
     // await closeButton();
     // await delay(3000);
     // await clickDiscardButton();
-    // await delay(3000);
+    
 
     modal = document.querySelector('.jobs-easy-apply-content');
 }
+await delay(3000);
 await clickCloseButton();
 }
 
@@ -381,7 +397,7 @@ async function getCurrentPageAsync() {
 
 
   async function goToNextPage() {
-    alert("starting");
+    // alert("starting");
 
     await scrollToBottom();
     let currentPage = await getCurrentPageAsync();
@@ -393,7 +409,7 @@ async function getCurrentPageAsync() {
     let nextPageButton = document.querySelector(`li[data-test-pagination-page-btn="${nextPage}"] button`);
 
     if (!nextPageButton) {
-        alert("Next page button not found, looking for '...' button");
+        // alert("Next page button not found, looking for '...' button");
         nextPageButton = document.querySelector(`button[aria-label="Page ${nextPage}"]`);
     }
 
@@ -416,7 +432,7 @@ async function getCurrentPageAsync() {
 
 
 
-
+let counter =0 ;
 
 async function clickElements() {
 
@@ -426,17 +442,26 @@ async function clickElements() {
     for(let i = 0; i < elements.length; i++){
         elements[i].click();
 
-        await new Promise(resolve => setTimeout(resolve, 2000));
+        let delayTime = Math.floor(Math.random() * (50000 - 10000 + 1) + 10000);
+    
+        await delay(delayTime);
         
 
         await clickEasyApply(); // Call main function
         try {
+            
             await main(); // Call main function
+            counter +=1;
+            if (counter >= 40) {
+                console.log("Applied to 40 jobs, stopping now.");
+                return;
+            }
         } catch (error) {
             console.error('Error in main: ', error);
         }
 
     }
+    //todo if counter is more than 40 stop the program
     await goToNextPage();
     await clickElements();
 }
@@ -460,7 +485,7 @@ async function clickEasyApply() {
     }
 
     if (visibleButton) {
-        alert("found");
+        // alert("found");
         visibleButton.click();
         console.log('Easy Apply button clicked, waiting 2 seconds before calling main...');
         await new Promise(resolve => setTimeout(resolve, 2000));

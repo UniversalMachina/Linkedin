@@ -1,6 +1,6 @@
 {
     "manifest_version": 2,
-    "name": "Button Clicker 2.0",
+    "name": "Linkedin Job Apply",
     "description": "This extension will find and click all '1-Click Apply' buttons on a webpage",
     "version": "1.0",
     "permissions": ["activeTab", "tabs", "<all_urls>",  "notifications", "webNavigation"],

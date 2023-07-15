@@ -9,7 +9,7 @@
 
 
 }
-
+/* 
 :root {
   --color-primary: #007299;
   --color-secondary: #0099cc;
@@ -25,13 +25,13 @@
 :root {
   --color-primary: #4D8080;
   --color-secondary: #70B2B2;
-}
+} */
 
 
-:root {
+/* :root {
   --color-primary: #008080;
   --color-secondary: #20B2AA;
-}
+} */
 
 body {
     margin: 0;
