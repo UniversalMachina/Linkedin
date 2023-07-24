@@ -306,7 +306,7 @@ async function isButtonAvailable(buttonSelector) {
 async function main() {
 
     let modal = document.querySelector('.jobs-easy-apply-content');
-
+    let jobsLoader = document.querySelector(".jobs-loader");
     // As long as the modal exists...
     while (modal) {
         let delayTime = Math.floor(Math.random() * (5000 - 2000 + 1) + 2000);
@@ -335,6 +335,12 @@ async function main() {
 
     } catch (error) {
         console.log(error.message);
+    }
+
+ 
+    // If the "jobs-loader" class is found, the alert is shown.
+    if (jobsLoader) {
+        alert("Jobs loader is present on the page.");
     }
     //if none of either are there
     // await closeButton();
@@ -442,20 +448,21 @@ async function clickElements() {
     for(let i = 0; i < elements.length; i++){
         elements[i].click();
 
-        let delayTime = Math.floor(Math.random() * (50000 - 10000 + 1) + 10000);
+        // let delayTime = Math.floor(Math.random() * (50000 - 10000 + 1) + 10000);
     
-        await delay(delayTime);
-        
+        // await delay(delayTime);
+
+        await delay(2000);
 
         await clickEasyApply(); // Call main function
         try {
             
             await main(); // Call main function
-            counter +=1;
-            if (counter >= 40) {
-                console.log("Applied to 40 jobs, stopping now.");
-                return;
-            }
+            // counter +=1;
+            // if (counter >= 40) {
+            //     console.log("Applied to 40 jobs, stopping now.");
+            //     return;
+            // }
         } catch (error) {
             console.error('Error in main: ', error);
         }
